@@ -714,12 +714,9 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
   border: 1px solid #b89345;
   border-radius: 28px;
   background: radial-gradient(circle at 50% 42%, color-mix(in srgb, #c79a3c 16%, var(--paper)), var(--surface) 76%);
-  box-shadow: inset 0 0 0 5px var(--paper), inset 0 0 0 6px color-mix(in srgb, #b89345 58%, transparent), 0 24px 60px color-mix(in srgb, var(--ink) 10%, transparent);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--ink) 10%, transparent);
   text-align: center;
 }
-.achievement-award::before, .achievement-award::after { content: ""; position: absolute; width: 72px; height: 72px; border-color: color-mix(in srgb, #b89345 68%, transparent); pointer-events: none; }
-.achievement-award::before { inset: 18px auto auto 18px; border-top: 1px solid; border-left: 1px solid; border-radius: 12px 0 0; }
-.achievement-award::after { inset: auto 18px 18px auto; border-right: 1px solid; border-bottom: 1px solid; border-radius: 0 0 12px; }
 .achievement-laurel { position: absolute; inset: 18px; z-index: -1; width: calc(100% - 36px); height: calc(100% - 36px); color: #b89345; fill: currentColor; opacity: .72; transform: scaleX(1.36); }
 .achievement-content { width: min(100%, 270px); }
 .achievement-level { display: inline-block; padding: 6px 13px; border-radius: 999px; background: linear-gradient(110deg, #9b7022, #d3aa51, #9b7022); color: #fff9e9; font-size: 9px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
@@ -1036,7 +1033,7 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
 @media(max-width:650px) { .record-timeline .record-banner { flex-direction: row; align-items: center; gap: 14px; top: 70px; padding: 12px; } .record-timeline .record-banner h2 { font-size: 22px; } .record-timeline .record-banner p { display: none; } .record-timeline .record-year-wheel { font-size: 42px; } }
 @media(prefers-reduced-motion:reduce) { .record-columns .publication { transition: none; } }
 
-.record-honor { position: relative; overflow: hidden; border-color: #b89345; background: radial-gradient(circle at 50% 42%, color-mix(in srgb, #c79a3c 16%, var(--paper)), var(--surface) 76%); box-shadow: inset 0 0 0 5px var(--paper), inset 0 0 0 6px color-mix(in srgb, #b89345 58%, transparent), 0 24px 60px color-mix(in srgb, var(--ink) 10%, transparent); }
+.record-honor { position: relative; overflow: hidden; border-color: #b89345; background: radial-gradient(circle at 50% 42%, color-mix(in srgb, #c79a3c 16%, var(--paper)), var(--surface) 76%); box-shadow: 0 24px 60px color-mix(in srgb, var(--ink) 10%, transparent); }
 .record-honor::before, .record-honor::after { content: ""; position: absolute; width: 72px; height: 72px; border-color: color-mix(in srgb, #b89345 68%, transparent); pointer-events: none; }
 .record-honor::before { inset: 18px auto auto 18px; border-top: 1px solid; border-left: 1px solid; border-radius: 12px 0 0; }
 .record-honor::after { inset: auto 18px 18px auto; border-right: 1px solid; border-bottom: 1px solid; border-radius: 0 0 12px; }

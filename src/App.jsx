@@ -1,3 +1,4 @@
+import { FaLinkedin, FaGithub, FaOrcid, FaResearchgate } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { LuContainer, LuWorkflow, LuMic, LuPresentation, LuFileText, LuSun, LuMoon } from "react-icons/lu";
@@ -51,6 +52,13 @@ function initialTheme() {
 export default function App() {
   const [theme, setTheme] = useState(initialTheme);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [rolesPaused, setRolesPaused] = useState(false);
+  const [musicError, setMusicError] = useState(false);
+  const [musicBlocked, setMusicBlocked] = useState(false);
+  const audio = useRef(null);
+  const vinyl = useRef(null);
+  const musicStarted = useRef(false);
   const dialog = useRef(null);
   const returnFocus = useRef(null);
   const hero = useRef(null);
@@ -66,6 +74,22 @@ export default function App() {
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#111A29" : "#F4F5F7");
     try { localStorage.setItem("portfolio-theme", theme); } catch { /* Keep the session theme. */ }
   }, [theme]);
+
+  useEffect(() => {
+    let disposed = false;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || entry.intersectionRatio < 0.8 || musicStarted.current) return;
+      musicStarted.current = true;
+      observer.disconnect();
+      audio.current.play().catch(error => {
+        if (disposed) return;
+        if (error.name === "NotAllowedError") setMusicBlocked(true);
+        else if (error.name !== "AbortError") setMusicError(true);
+      });
+    }, { threshold: 0.8 });
+    observer.observe(vinyl.current);
+    return () => { disposed = true; observer.disconnect(); };
+  }, []);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -102,14 +126,21 @@ export default function App() {
         <section className="hero editorial-hero" ref={hero} aria-labelledby="hero-title">
           <h1 className="hero-masthead" id="hero-title"><span>Pranav Swaroop</span><span>Gundla</span></h1>
           <motion.div className="hero-copy" initial={{ opacity: 0, y: reduced ? 0 : 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? 0 : 0.65 }}>
-            <p className="eyebrow">Computational oncology researcher</p>
-            <p className="hero-summary">Doctoral researcher building deep learning strategies for histology, spatial biology, and understanding glioma TMEs.</p>
+            <span className="chapter-index">Tissue. Context. Code.</span>
+            <p className="hero-summary">Understanding glioma through histology, spatial biology, and deep learning.</p>
+            <span className="hero-location">Essen, Germany</span>
           </motion.div>
           <motion.figure className="hero-avatar" style={{ y: reduced ? 0 : heroY }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.8 }}>
             <img src={theme === "light" ? "/portfolio/avatar-light.png" : "/portfolio/avatar-dark.png"} width="1024" height="1536" fetchPriority="high" alt="Illustrated portrait of Pranav Swaroop Gundla" />
           </motion.figure>
-          <aside className="hero-editor-note"><span className="chapter-index">Tissue. Context. Code.</span><p>Understanding glioma through histology, spatial biology, and deep learning.</p><span className="hero-location">Essen, Germany</span></aside>
-          <div className="hero-colophon"><span>Computational oncology / Selected work</span><a href="#work">Read on ↓</a></div>
+          <aside className="hero-editor-note" aria-label="About me">
+            <span className="chapter-index">A few sides of me</span>
+            <div className={`role-wheel${rolesPaused ? " is-paused" : ""}`}>
+              <ul className="role-track" aria-hidden="true">{["AI researcher", "Interdisciplinary enthusiast", "Hobbyist", "AI researcher", "Interdisciplinary enthusiast", "Hobbyist"].map((role, index) => <li key={index}>{role}</li>)}</ul>
+            </div>
+            <span className="role-accessible">AI researcher, Interdisciplinary enthusiast, Hobbyist.</span>
+            <button className="role-pause" type="button" aria-pressed={rolesPaused} onClick={() => setRolesPaused(!rolesPaused)}>{rolesPaused ? "Resume rotation" : "Pause rotation"}</button>
+          </aside>
         </section>
         <ResearchNotebook onExplore={setSelectedProject} />
         <motion.section className="section research-record" aria-label="Publications and methods" {...reveal}>
@@ -147,18 +178,32 @@ export default function App() {
         <SocialPosts />
         <section id="contact" className="contact" aria-labelledby="contact-title">
           <div className="contact-invitation"><p className="eyebrow">Have a question or a project in mind?</p>
-          <h2 id="contact-title">Let’s Connect</h2>
+          <h2 id="contact-title">Let’s <span className="contact-accent">Connect</span></h2>
           <a className="contact-email" href="mailto:contact@psgundla.com">contact@psgundla.com</a>
           </div>
-          <aside className="contact-profile-card" aria-label="Contact card">
-            <span className="chapter-index">@researcher</span><h3>Pranav Swaroop Gundla</h3>
-            <dl><div><dt>field</dt><dd>Computational oncology</dd></div><div><dt>based in</dt><dd>Essen, Germany</dd></div><div><dt>email</dt><dd><a href="mailto:contact@psgundla.com">contact@psgundla.com ↗</a></dd></div><div><dt>ORCID</dt><dd><a href="https://orcid.org/0000-0002-3726-1445" target="_blank" rel="noreferrer">0000-0002-3726-1445 ↗</a></dd></div></dl>
+          <aside className="contact-profile-card music-card" aria-labelledby="music-title">
+            <span className="chapter-index">Off the clock · on repeat</span>
+            <div ref={vinyl} className={`vinyl-deck${musicPlaying ? " is-playing" : ""}`} role="img" aria-label="Vintage vinyl record with a red center label and silver tonearm">
+              <div className="vinyl-record"><div className="vinyl-label"><span>PSG</span><small>SIDE A · DAILY ROTATION</small></div></div>
+              <div className="vinyl-arm" />
+            </div>
+            <h3 id="music-title">Always a soundtrack.</h3>
+            <p className="music-fact">Fun fact: I listen to music for more than <strong>7 hours a day.</strong></p>
+            <p className="music-track">Piano background music · Delosound</p>
+            <audio ref={audio} controls preload="metadata" aria-label="Play Piano background music by Delosound"
+              src="/audio/delosound-piano-background-music-398277.mp3"
+              onPlay={() => { musicStarted.current = true; }}
+              onPlaying={() => { setMusicPlaying(true); setMusicBlocked(false); }} onPause={() => setMusicPlaying(false)}
+              onWaiting={() => setMusicPlaying(false)} onEnded={() => setMusicPlaying(false)}
+              onError={() => { setMusicPlaying(false); setMusicError(true); }} />
+            {musicBlocked && !musicError && <p className="music-track" role="status">Press Play to start the soundtrack.</p>}
+            {musicError && <p role="alert">Audio could not load. Please reload and try again.</p>}
           </aside>
             <nav className="contact-profiles" aria-label="External profiles">
-              <a href="https://linkedin.com/in/pranavswaroopgundla/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-              <a href="https://github.com/psgundla" target="_blank" rel="noreferrer">GitHub ↗</a>
-              <a href="https://orcid.org/0000-0002-3726-1445" target="_blank" rel="noreferrer">ORCID ↗</a>
-              <a href="https://researchgate.net/profile/Pranav-Swaroop-Gundla" target="_blank" rel="noreferrer">ResearchGate ↗</a>
+              <a href="https://linkedin.com/in/pranavswaroopgundla/" target="_blank" rel="noreferrer" className="raised-glass brand-linkedin" aria-label="LinkedIn" title="LinkedIn"><FaLinkedin aria-hidden="true" /></a>
+              <a href="https://github.com/psgundla" target="_blank" rel="noreferrer" className="raised-glass brand-github" aria-label="GitHub" title="GitHub"><FaGithub aria-hidden="true" /></a>
+              <a href="https://orcid.org/0000-0002-3726-1445" target="_blank" rel="noreferrer" className="raised-glass brand-orcid" aria-label="ORCID" title="ORCID"><FaOrcid aria-hidden="true" /></a>
+              <a href="https://researchgate.net/profile/Pranav-Swaroop-Gundla" target="_blank" rel="noreferrer" className="raised-glass brand-researchgate" aria-label="ResearchGate" title="ResearchGate"><FaResearchgate aria-hidden="true" /></a>
             </nav>
         </section>
       </main>

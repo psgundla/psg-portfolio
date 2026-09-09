@@ -1,3 +1,4 @@
+import { SiGooglescholar } from "react-icons/si";
 import { LuMic, LuPresentation } from "react-icons/lu";
 import AchievementAward from "./AchievementAward";
 import { publications } from "../data/portfolio";
@@ -6,7 +7,7 @@ export default function ResearchRecord() {
   return <div className="research-board">
     <div className="record-timeline">
     <header className="record-banner">
-      <div><span className="chapter-index">Research record</span><h2>Ideas, shared.</h2><p>Publications, conversations, and recognition.</p></div>
+      <div><span className="chapter-index">Research record</span><h2>Research in print &amp; in person</h2><p>Publications, conversations, and recognition.</p></div>
     </header>
     <div className="record-columns">
       <section className="record-papers" aria-labelledby="record-publications">
@@ -14,11 +15,11 @@ export default function ResearchRecord() {
         <div className="publications">{publications.map(paper => <a className="publication" key={paper.href} href={paper.href} target="_blank" rel="noreferrer">
           <span className="publication-year">{paper.year}<small>{paper.month}</small></span><div><span className="publication-type">{paper.type}</span><h3>{paper.title}</h3><p>{paper.venue}</p></div><span aria-hidden="true">↗</span>
         </a>)}</div>
-        <a className="text-link scholar-glass" href="https://scholar.google.com/citations?user=UzlYsbgAAAAJ&hl=en" target="_blank" rel="noreferrer">Google Scholar ↗</a>
+        <a className="text-link scholar-glass raised-glass brand-scholar" aria-label="Google Scholar" title="Google Scholar" href="https://scholar.google.com/citations?user=UzlYsbgAAAAJ&hl=en" target="_blank" rel="noreferrer"><SiGooglescholar aria-hidden="true" /></a>
       </section>
       <section className="record-events" aria-labelledby="record-events-title">
         <header><span className="chapter-index">02 / Research exchange</span><h3 id="record-events-title">Conferences, talks & posters</h3></header>
-        <a className="record-note" href={publications[0].href} target="_blank" rel="noreferrer"><LuPresentation aria-hidden="true" /><span className="record-note-year">2025 · Conference & poster · 278P</span><h4>ESMO AI &amp; Digital Oncology Congress</h4><p>1st ESMO AI Congress · Genetic subtype prediction in diffuse gliomas</p><span className="text-link">View abstract ↗</span></a>
+        <article className="record-note"><LuPresentation aria-hidden="true" /><span className="record-note-year">2025 · Conference & poster · 278P</span><h4>ESMO AI &amp; Digital Oncology Congress</h4><p>1st ESMO AI Congress · Genetic subtype prediction in diffuse gliomas</p><a className="text-link" href={publications[0].href} target="_blank" rel="noreferrer">View abstract ↗</a></article>
         <article className="record-note"><LuMic aria-hidden="true" /><span className="record-note-year">Invited Talk to PostDoc/PhD Retreat</span><h4>CANTAR retreat</h4><p>CANcer TARgeting PhD/PostDoc Retreat, CIO Cologne</p></article>
         <article className="record-note"><span className="record-note-year">Symposium attendance</span><h4>CRC symposium</h4><p>CIO Cologne</p></article>
         <article className="record-note"><LuPresentation aria-hidden="true" /><span className="record-note-year">Poster presentation</span><h4>Tag der Research 2024</h4><p>Lehrzentrum, UK Essen</p></article>

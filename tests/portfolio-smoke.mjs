@@ -25,7 +25,7 @@ try {
   assert.ok(html.includes('/portfolio/avatar-light.png') && !html.includes('/portfolio/research-desk.png'), 'Avatar hero or removed research art is incorrect');
   for (const file of ['public/portfolio/avatar-light.png', 'public/portfolio/avatar-dark.png']) await access(file);
   assert.ok(html.includes('class="photo-reel"') && !html.includes('photo-controls'), 'Infinite photo reel missing');
-  assert.ok(html.includes('Let’s Connect') && !html.includes('Frame 1 of'), 'Requested copy cleanup missing');
+  assert.ok(html.replace(/<[^>]*>/g, '').includes('Let’s Connect') && !html.includes('Frame 1 of'), 'Requested copy cleanup missing');
   assert.ok(html.includes('class="achievement-award"') && html.includes('Genetic subtype prediction in diffuse gliomas'), 'Achievement award redesign missing');
   assert.ok(html.includes('class="stack-icon"') && html.includes('aria-label="Python"') && html.includes('aria-label="Apptainer"') && !html.includes('img.shields.io'), 'React icon stack missing');
   assert.ok(html.includes('id="open-source"') && html.includes('154') && html.includes('mahmoodlab/TRIDENT'), 'Current GitHub contribution section missing');

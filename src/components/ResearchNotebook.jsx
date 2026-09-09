@@ -1,3 +1,4 @@
+import { LuNotebookPen } from "react-icons/lu";
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { projects } from "../data/portfolio";
@@ -9,7 +10,7 @@ export default function ResearchNotebook({ onExplore }) {
   return (
     <section id="work" className="section research" aria-labelledby="work-title">
       <div className="section-heading">
-        <h2 id="work-title">What I’m working on.</h2>
+        <h2 id="work-title">Research focus</h2>
         <p>Research questions, methods, and projects from my PhD.</p>
       </div>
       <div className="notebook">
@@ -31,10 +32,10 @@ export default function ResearchNotebook({ onExplore }) {
             <h3>{project.question}</h3>
             <p>{project.description}</p>
             <div className="method-tags">{project.approach.split(" · ").map(method => <span key={method}>{method}</span>)}</div>
-            <motion.button className="text-link" type="button" whileHover={reduced ? {} : { x: 4 }}
+            <motion.button className="text-link raised-glass" type="button" whileHover={reduced ? {} : { x: 4 }}
               whileTap={reduced ? {} : { scale: 0.98 }} onClick={() => onExplore(project)}
               aria-label={`Explore the work: ${project.title}`}>
-              Open research notes <span aria-hidden="true">↗</span>
+              <LuNotebookPen aria-hidden="true" /><span>Open research notes</span>
             </motion.button>
           </div>
         </motion.div>

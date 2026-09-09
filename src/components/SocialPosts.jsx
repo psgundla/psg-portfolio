@@ -4,7 +4,7 @@ import { socialPosts } from "../data/portfolio";
 
 const profiles = [
   { platform: "linkedin", label: "LinkedIn", mark: "in", href: "https://linkedin.com/in/pranavswaroopgundla/" },
-  { platform: "twitter", label: "Twitter / X", mark: "X", href: "https://x.com/im_pranavgundla" },
+  { platform: "twitter", label: "X", mark: "X", href: "https://x.com/im_pranavgundla" },
 ];
 
 function PostCard({ post, profile }) {
@@ -31,7 +31,7 @@ function PostCard({ post, profile }) {
 export default function SocialPosts({ posts = socialPosts }) {
   return (
     <section id="social" className="section social" aria-labelledby="social-title">
-      <div className="section-heading"><span className="chapter-index">05 / In conversation</span><h2 id="social-title">Research & <em>conversations.</em></h2><p>Posts and conversations from LinkedIn and Twitter / X.</p></div>
+      <div className="section-heading"><span className="chapter-index">05 / In conversation</span><h2 id="social-title">Research & <em>conversations.</em></h2><p>Posts and conversations from LinkedIn and X.</p></div>
       <div className="social-columns">{profiles.map(profile => {
         const selected = posts.filter(post => post.platform === profile.platform);
         return <div className="social-column" key={profile.platform}>

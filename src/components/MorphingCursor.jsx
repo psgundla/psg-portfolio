@@ -14,10 +14,12 @@ export default function MorphingCursor() {
       const target = event.target;
       if (!node || !media.matches || event.pointerType !== 'mouse' || !(target instanceof Element)) return hide();
       // Native cursors remain available for editing, disabled controls and top-layer dialogs.
-      if (target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [disabled], [aria-disabled="true"], dialog, iframe')) return hide();
+      if (target.closest('audio, video, input, textarea, select, [contenteditable]:not([contenteditable="false"]), [disabled], [aria-disabled="true"], dialog, iframe')) return hide();
+      const link = target.closest('a[href], [role="link"]');
       const text = target.closest('a, button, summary, h1, h2, h3, h4, h5, h6, p, span, li, label, strong, em, small, blockquote, figcaption, [role="button"], [role="tab"]');
       node.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
-      node.classList.toggle('is-text', Boolean(text?.textContent.trim()));
+      node.classList.toggle('is-link', Boolean(link));
+      node.classList.toggle('is-text', !link && Boolean(text?.textContent.trim()));
       node.classList.add('is-visible');
       root.classList.add('morphing-cursor-on');
     };
@@ -47,6 +49,6 @@ export default function MorphingCursor() {
     };
   }, []);
   return (
-    <div ref={cursor} className="morphing-cursor" aria-hidden="true"><span /></div>
+    <div ref={cursor} className="morphing-cursor" aria-hidden="true"><span /><svg viewBox="0 0 24 28" focusable="false"><path d="M2 1v22l6-6 4 9 4-2-4-9h9Z" /></svg></div>
   );
 }
