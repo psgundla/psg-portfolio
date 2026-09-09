@@ -1,316 +1,183 @@
-import { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
-import './styles/Portfolio.css';
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { LuContainer, LuWorkflow, LuMic, LuPresentation, LuFileText, LuSun, LuMoon } from "react-icons/lu";
+import { SiDocker, SiGit, SiLinux, SiNextflow, SiPython, SiPytorch, SiR } from "react-icons/si";
+import NavPill from "./components/NavPill";
+import MorphingCursor from "./components/MorphingCursor";
+import SocialPosts from "./components/SocialPosts";
+import ResearchNotebook from "./components/ResearchNotebook";
+import GitHubContributions from "./components/GitHubContributions";
+import ResearchRecord from "./components/ResearchRecord";
+import { photos } from "./data/portfolio";
+import "./styles/Portfolio.css";
+import "./styles/Editorial.css";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-const asset = (name) => `/portfolio/${name}`;
-
-const projects = [
+const stackGroups = [
   {
-    title: 'Glioma AI',
-    description: 'Predicting molecular subtype from H&E whole-slide images.',
-    image: 'project_glioma.png',
-    alt: 'Glioma tissue with an interpretable model attention map',
-    className: 'work-card--feature',
+    label: "Models and data",
+    badges: [
+      ["Python", SiPython],
+      ["PyTorch", SiPytorch],
+      ["R", SiR],
+    ],
   },
   {
-    title: 'Spatial biology',
-    description: 'Connecting morphology with cellular and molecular context.',
-    image: 'project_spatial.png',
-    alt: 'Spatial cell map aligned with tissue morphology',
-    className: 'work-card--compact',
+    label: "Research workflows",
+    badges: [
+      ["Snakemake", LuWorkflow],
+      ["Nextflow", SiNextflow],
+      ["Git", SiGit],
+    ],
   },
   {
-    title: 'Reproducible research',
-    description: 'Pipelines built to move across cohorts and institutions.',
-    image: 'project_registration.png',
-    alt: 'Reproducible computational research workflow',
-    className: 'work-card--compact',
+    label: "Compute and environments",
+    badges: [
+      ["Linux", SiLinux],
+      ["Docker", SiDocker],
+      ["Apptainer", LuContainer],
+    ],
   },
 ];
 
-const interests = [
-  ['life_travel.png', 'Travel', 'Mountain lake landscape'],
-  ['life_photo.png', 'Photography', 'Camera used for documentary photography'],
-  ['life_music.png', 'Music', 'Headphones for focused listening', '/bunker/'],
-  ['life_reading.png', 'Reading', 'Books stacked near a window'],
-  ['life_running.png', 'Running', 'Forest path used for running'],
-  ['life_open.png', 'Open source', 'Code on a laptop screen'],
-];
-
-const getInitialTheme = () => {
+function initialTheme() {
+  if (typeof window === "undefined") return "light";
   try {
-    const savedTheme = window.localStorage.getItem('portfolio-theme');
-    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
-  } catch {
-    // Storage may be unavailable in privacy modes.
-  }
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-};
-
-function Arrow() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      <path d="M4 10h11M11 6l4 4-4 4" />
-    </svg>
-  );
+    const saved = localStorage.getItem("portfolio-theme");
+    if (saved === "light" || saved === "dark") return saved;
+  } catch { /* Fall back to the system preference. */ }
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function App() {
-  const [theme, setTheme] = useState(getInitialTheme);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const pageRef = useRef(null);
+export default function App() {
+  const [theme, setTheme] = useState(initialTheme);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const dialog = useRef(null);
+  const returnFocus = useRef(null);
+  const hero = useRef(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const { scrollYProgress: heroProgress } = useScroll({ target: hero, offset: ["start start", "end start"] });
+  const heroY = useTransform(heroProgress, [0, 1], [0, 45]);
+  const reveal = { initial: { opacity: 1, y: reduced ? 0 : 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } };
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute(
-      'content',
-      theme === 'dark' ? '#11100f' : '#f7f6f2',
-    );
-    try {
-      window.localStorage.setItem('portfolio-theme', theme);
-    } catch {
-      // Theme remains active for current visit.
-    }
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#111A29" : "#F4F5F7");
+    try { localStorage.setItem("portfolio-theme", theme); } catch { /* Keep the session theme. */ }
   }, [theme]);
 
   useEffect(() => {
-    if (!menuOpen) return undefined;
-
-    const closeMenu = (event) => {
-      if (event.key === 'Escape') setMenuOpen(false);
+    if (!selectedProject) return;
+    const element = dialog.current;
+    returnFocus.current = document.activeElement;
+    element.showModal();
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = oldOverflow;
+      if (element.open) element.close();
+      returnFocus.current?.focus();
     };
-
-    document.addEventListener('keydown', closeMenu);
-    return () => document.removeEventListener('keydown', closeMenu);
-  }, [menuOpen]);
-
-  useGSAP(() => {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) return undefined;
-
-    const media = gsap.matchMedia();
-
-    gsap.from('.hero-copy > *', {
-      y: 22,
-      autoAlpha: 0,
-      duration: 0.85,
-      stagger: 0.09,
-      ease: 'power3.out',
-    });
-
-    gsap.from('.hero-media', {
-      scale: 0.94,
-      autoAlpha: 0,
-      duration: 1.1,
-      ease: 'power3.out',
-    });
-
-    gsap.utils.toArray('.reveal').forEach((element) => {
-      gsap.from(element, {
-        y: 18,
-        autoAlpha: 0,
-        duration: 0.75,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 88%',
-          once: true,
-        },
-      });
-    });
-
-    gsap.utils.toArray('.motion-image').forEach((image) => {
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: image,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.7,
-        },
-      })
-        .fromTo(image, { scale: 0.9, autoAlpha: 0.5 }, { scale: 1, autoAlpha: 1, duration: 0.46, ease: 'none' })
-        .to(image, { autoAlpha: 0.35, duration: 0.54, ease: 'none' });
-    });
-
-    media.add('(min-width: 981px)', () => {
-      ScrollTrigger.create({
-        trigger: '.work-layout',
-        start: 'top 104px',
-        end: 'bottom bottom-=96',
-        pin: '.work-intro',
-        pinSpacing: false,
-      });
-    });
-
-    return () => media.revert();
-  }, { scope: pageRef });
-
-  const closeMenu = () => setMenuOpen(false);
+  }, [selectedProject]);
 
   return (
-    <div ref={pageRef} className="site-shell">
+    <div className="site-shell">
+      <MorphingCursor />
       <a className="skip-link" href="#main">Skip to content</a>
-
+      <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
       <header className="site-header">
-        <a className="brand" href="#main" aria-label="Pranav Swaroop Gundla, home" onClick={closeMenu}>
-          <span className="monogram"><span>P</span><span>S</span><span>G</span></span>
-          <span className="brand-name">Pranav Swaroop Gundla</span>
+        <a className="brand" href="#main" aria-label="Pranav Swaroop Gundla, home">
+          <img src={`/brand/psg-final/psg-${theme === "dark" ? "white" : "black"}.svg`} width="1600" height="864" alt="" />
         </a>
-
-        <nav id="primary-navigation" className={menuOpen ? 'site-nav site-nav--open' : 'site-nav'} aria-label="Primary navigation">
-          <a href="#work" onClick={closeMenu}>Work</a>
-          <a href="#about" onClick={closeMenu}>About</a>
-          <a href="#life" onClick={closeMenu}>Life</a>
-          <a href="#contact" onClick={closeMenu}>Contact</a>
-        </nav>
-
+        <NavPill />
         <div className="header-actions">
-          <button
-            className="theme-toggle"
-            type="button"
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
-          >
-            {theme === 'dark' ? 'Light' : 'Dark'}
-          </button>
-          <button
-            className="menu-toggle"
-            type="button"
-            aria-expanded={menuOpen}
-            aria-controls="primary-navigation"
-            onClick={() => setMenuOpen((current) => !current)}
-          >
-            {menuOpen ? 'Close' : 'Menu'}
-          </button>
+          <button type="button" className="theme-toggle" aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? <LuMoon size={20} aria-hidden="true" /> : <LuSun size={20} aria-hidden="true" />}</button>
+          <a className="header-cv" href="/CV-Pranav-Swaroop-Gundla.pdf" target="_blank" rel="noreferrer">CV ↗</a>
+
         </div>
       </header>
-
       <main id="main">
-        <section className="hero" aria-labelledby="hero-title">
-          <div className="hero-copy">
-            <p className="role">PhD researcher · AI in medicine · Essen</p>
-            <h1 id="hero-title"><span>I teach machines to</span>{' '}<span>read cancer from tissue.</span></h1>
-            <p className="hero-summary">Computational pathology, spatial biology, and interpretable AI.</p>
-            <div className="hero-actions">
-              <a className="button button--primary" href="#work">View work</a>
-              <a className="button button--secondary" href="/CV-Pranav-Swaroop-Gundla.pdf" target="_blank" rel="noreferrer">Download CV</a>
-            </div>
-          </div>
-
-          <figure className="hero-media">
-            <img src={asset('hero_histology.png')} alt="Monochrome illustration of a histology tissue section" />
-            <figcaption>Illustrative interface · not clinical data</figcaption>
-          </figure>
+        <section className="hero editorial-hero" ref={hero} aria-labelledby="hero-title">
+          <h1 className="hero-masthead" id="hero-title"><span>Pranav Swaroop</span><span>Gundla</span></h1>
+          <motion.div className="hero-copy" initial={{ opacity: 0, y: reduced ? 0 : 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? 0 : 0.65 }}>
+            <p className="eyebrow">Computational oncology researcher</p>
+            <p className="hero-summary">Doctoral researcher building deep learning strategies for histology, spatial biology, and understanding glioma TMEs.</p>
+          </motion.div>
+          <motion.figure className="hero-avatar" style={{ y: reduced ? 0 : heroY }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.8 }}>
+            <img src={theme === "light" ? "/portfolio/avatar-light.png" : "/portfolio/avatar-dark.png"} width="1024" height="1536" fetchPriority="high" alt="Illustrated portrait of Pranav Swaroop Gundla" />
+          </motion.figure>
+          <aside className="hero-editor-note"><span className="chapter-index">Tissue. Context. Code.</span><p>Understanding glioma through histology, spatial biology, and deep learning.</p><span className="hero-location">Essen, Germany</span></aside>
+          <div className="hero-colophon"><span>Computational oncology / Selected work</span><a href="#work">Read on ↓</a></div>
         </section>
-
-        <section id="work" className="chapter work-section" aria-labelledby="work-title">
-          <div className="work-layout">
-            <div className="work-intro reveal">
-              <p className="section-kicker">Selected work</p>
-              <h2 id="work-title">Tissue to evidence.</h2>
-            </div>
-
-            <div className="work-grid">
-              {projects.map((project) => (
-                <article className={`work-card ${project.className} reveal`} key={project.title}>
-                  <div className="work-image-wrap">
-                    <img className="motion-image" src={asset(project.image)} alt={project.alt} />
-                  </div>
-                  <div className="work-card-copy">
-                    <h3>{project.title}</h3>
-                    <p>{project.description}</p>
-                  </div>
-                </article>
-              ))}
+        <ResearchNotebook onExplore={setSelectedProject} />
+        <motion.section className="section research-record" aria-label="Publications and methods" {...reveal}>
+          <ResearchRecord />
+          <section className="technical-stack" aria-labelledby="technical-stack-title">
+          <header><span className="chapter-index">Skills & methods</span><h2 id="technical-stack-title">Technical stack</h2></header>
+          <div className="stack-grid" aria-label="Research technology stack">
+            {stackGroups.map((group, index) => <motion.section className="stack-card" key={group.label}
+              whileHover={reduced ? {} : { y: -6, rotate: index === 1 ? 0 : index ? 1 : -1 }}>
+              <h3>{group.label}</h3>
+              <div className="stack-icons">{group.badges.map(([label, Icon]) => <span className="stack-icon" aria-label={label} title={label} key={label}><Icon aria-hidden="true" /></span>)}</div>
+            </motion.section>)}
+            <section className="stack-card communication-skills"><h3>Science communication</h3><ul><li><LuFileText aria-hidden="true" />Scientific writing</li><li><LuPresentation aria-hidden="true" />Research posters</li><li><LuMic aria-hidden="true" />Talks & presentations</li></ul></section>
+          </div>
+          </section>
+        </motion.section>
+        <GitHubContributions />
+        <section id="life" className="section life" aria-labelledby="life-title">
+          <div className="life-heading"><div><h2 id="life-title">Life, <em>in frames.</em></h2><p>Places photographed between research days.</p></div></div>
+          <div className="photo-reel" tabIndex="0" role="region" aria-label="Looping photo reel of places">
+            <div className="photo-reel-track">
+              {[...photos, ...photos].map(([file, , alt], index) => {
+                const clone = index >= photos.length;
+                return <figure className="photo" key={`${file}-${clone ? "clone" : "original"}`} data-clone={clone || undefined} aria-hidden={clone || undefined}>
+                  <img src={`/portfolio/photos/${file}.webp`} alt={clone ? "" : alt} decoding="async" width="600" height="800" />
+                </figure>;
+              })}
             </div>
           </div>
-
-          <dl className="proof reveal" aria-label="Research highlights">
-            <div><dt>5K+</dt><dd>whole-slide images</dd></div>
-            <div><dt>5</dt><dd>publications</dd></div>
-            <div><dt>ESMO</dt><dd>Merit Award</dd></div>
-          </dl>
+          <motion.article className="bunker-card" whileHover={reduced ? {} : { y: -5 }}>
+            <div className="bunker-thumbnail"><img src="/portfolio/bunker-preview.png" alt="BUNKER techno sequencer interface with synthesizer and drum controls" width="1440" height="960" loading="lazy" /></div>
+            <span className="eyebrow">Side project</span><h3>BUNKER</h3><p>Browser-based techno sequencer built with Web Audio.</p><a className="text-link" href="/bunker/index.html">Open sequencer ↗</a>
+          </motion.article>
         </section>
-
-        <section id="about" className="chapter about" aria-labelledby="about-title">
-          <p className="section-kicker">About</p>
-          <div className="about-grid reveal">
-            <h2 id="about-title">
-              From mathematics to{' '}
-              <span className="inline-sample" role="img" aria-label="histology sample" />{' '}
-              bioinformatics, cancer biology, and AI in medicine.
-            </h2>
-            <div className="about-details">
-              <p>I build models that connect tissue morphology with molecular and spatial context.</p>
-              <p className="methods">Python · PyTorch · R · Docker · HPC · Snakemake</p>
-            </div>
+        <SocialPosts />
+        <section id="contact" className="contact" aria-labelledby="contact-title">
+          <div className="contact-invitation"><p className="eyebrow">Have a question or a project in mind?</p>
+          <h2 id="contact-title">Let’s Connect</h2>
+          <a className="contact-email" href="mailto:contact@psgundla.com">contact@psgundla.com</a>
           </div>
-        </section>
-
-        <section id="life" className="chapter life" aria-labelledby="life-title">
-          <div className="life-heading reveal">
-            <div>
-              <p className="section-kicker">Outside research</p>
-              <h2 id="life-title">What keeps me curious.</h2>
-            </div>
-            <p>Travel, images, sound, books, movement, and useful code.</p>
-          </div>
-
-          <div className="life-gallery">
-            {interests.map(([image, title, alt, href], index) => {
-              const Card = href ? 'a' : 'figure';
-              return (
-              <Card
-                className={`life-item reveal${href ? ' life-item--link' : ''}`}
-                key={title}
-                style={{ '--item-index': index }}
-                href={href}
-                aria-label={href ? 'Open BUNKER techno generator' : undefined}
-              >
-                <div className="life-image-wrap">
-                  <img className="motion-image" src={asset(image)} alt={alt} />
-                </div>
-                <span className="life-caption">
-                  <span>{title}</span>
-                  {href && <span className="life-link-label">Bunker <Arrow /></span>}
-                </span>
-              </Card>
-              );
-            })}
-          </div>
-        </section>
-
-        <section id="contact" className="chapter contact" aria-labelledby="contact-title">
-          <div className="contact-copy reveal">
-            <p className="section-kicker">Contact</p>
-            <h2 id="contact-title">Interested in careful AI for cancer research?</h2>
-            <a className="contact-email" href="mailto:contact@psgundla.com">
-              contact@psgundla.com
-              <Arrow />
-            </a>
-          </div>
-
-          <nav className="contact-links reveal" aria-label="External profiles">
-            <a href="https://linkedin.com/in/pranavswaroopgundla/" target="_blank" rel="noreferrer">LinkedIn <Arrow /></a>
-            <a href="https://scholar.google.com/citations?user=UzlYsbgAAAAJ&hl=en" target="_blank" rel="noreferrer">Google Scholar <Arrow /></a>
-            <a href="https://github.com/psgundla" target="_blank" rel="noreferrer">GitHub <Arrow /></a>
-            <a href="https://researchgate.net/profile/Pranav-Swaroop-Gundla" target="_blank" rel="noreferrer">ResearchGate <Arrow /></a>
-          </nav>
+          <aside className="contact-profile-card" aria-label="Contact card">
+            <span className="chapter-index">@researcher</span><h3>Pranav Swaroop Gundla</h3>
+            <dl><div><dt>field</dt><dd>Computational oncology</dd></div><div><dt>based in</dt><dd>Essen, Germany</dd></div><div><dt>email</dt><dd><a href="mailto:contact@psgundla.com">contact@psgundla.com ↗</a></dd></div><div><dt>ORCID</dt><dd><a href="https://orcid.org/0000-0002-3726-1445" target="_blank" rel="noreferrer">0000-0002-3726-1445 ↗</a></dd></div></dl>
+          </aside>
+            <nav className="contact-profiles" aria-label="External profiles">
+              <a href="https://linkedin.com/in/pranavswaroopgundla/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+              <a href="https://github.com/psgundla" target="_blank" rel="noreferrer">GitHub ↗</a>
+              <a href="https://orcid.org/0000-0002-3726-1445" target="_blank" rel="noreferrer">ORCID ↗</a>
+              <a href="https://researchgate.net/profile/Pranav-Swaroop-Gundla" target="_blank" rel="noreferrer">ResearchGate ↗</a>
+            </nav>
         </section>
       </main>
-
-      <footer className="site-footer">
-        <span>© 2026 Pranav Swaroop Gundla</span>
-        <span>Computational oncology · Essen</span>
-        <a href="#main">Back to top</a>
-      </footer>
+      <footer className="site-footer"><span>© {new Date().getFullYear()} Pranav Swaroop Gundla</span><a href="#main">Back to top ↑</a></footer>
+      <dialog className="project-dialog" ref={dialog} aria-labelledby="project-dialog-title" onClose={() => setSelectedProject(null)}
+        onClick={event => {
+          if (event.target === event.currentTarget) {
+            const box = event.currentTarget.getBoundingClientRect();
+            if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) event.currentTarget.close();
+          }
+        }}>
+        {selectedProject && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.2 }}>
+          <div className="dialog-top"><span className="eyebrow">{selectedProject.tag}</span><button type="button" className="dialog-close" onClick={() => dialog.current.close()} aria-label="Close project details">Close ×</button></div>
+          <h2 id="project-dialog-title">{selectedProject.title}</h2><p className="project-question">{selectedProject.question}</p>
+          <h3>My work</h3><p>{selectedProject.work}</p><h3>Approach</h3><p>{selectedProject.approach}</p>
+          <div className="project-note">{selectedProject.note}</div>
+          <div className="project-links">{selectedProject.links.map(link => <a className="text-link" href={link.href} key={link.href} target={link.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">{link.label} ↗</a>)}</div>
+        </motion.div>}
+      </dialog>
     </div>
   );
 }
-
-export default App;
