@@ -7,6 +7,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 // Render the real Vite modules without a browser; interaction checks run separately.
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom' });
 try {
+  const { default: NotFound, isPortfolioPath } = await server.ssrLoadModule('/src/components/NotFound.jsx');
+  assert.ok(isPortfolioPath('/') && isPortfolioPath('/index.html'));
+  assert.ok(!isPortfolioPath('/missing-page') && !isPortfolioPath('/404'));
+  const missingHtml = renderToStaticMarkup(React.createElement(NotFound));
+  assert.ok(missingHtml.includes('Page Not Found') && missingHtml.includes('href="/"') && !missingHtml.includes('<iframe'));
+  assert.ok(!missingHtml.includes('youtube'));
   const { default: App } = await server.ssrLoadModule('/src/App.jsx');
   const html = renderToStaticMarkup(React.createElement(App));
   for (const anchor of ['main', 'work', 'life', 'social', 'contact']) {

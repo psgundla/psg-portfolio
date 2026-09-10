@@ -1,7 +1,7 @@
-import { FaLinkedin, FaGithub, FaOrcid, FaResearchgate } from "react-icons/fa6";
+import { FaLinkedin, FaGithub, FaOrcid, FaResearchgate, FaInstagram } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { LuContainer, LuWorkflow, LuMic, LuPresentation, LuFileText, LuSun, LuMoon } from "react-icons/lu";
+import { LuPlay, LuPause, LuContainer, LuWorkflow, LuMic, LuPresentation, LuFileText, LuSun, LuMoon, LuCoffee, LuCodeXml, LuSearch } from "react-icons/lu";
 import { SiDocker, SiGit, SiLinux, SiNextflow, SiPython, SiPytorch, SiR } from "react-icons/si";
 import NavPill from "./components/NavPill";
 import MorphingCursor from "./components/MorphingCursor";
@@ -53,6 +53,8 @@ export default function App() {
   const [theme, setTheme] = useState(initialTheme);
   const [selectedProject, setSelectedProject] = useState(null);
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const [musicTime, setMusicTime] = useState(0);
+  const [musicDuration, setMusicDuration] = useState(0);
   const [rolesPaused, setRolesPaused] = useState(false);
   const [musicError, setMusicError] = useState(false);
   const [musicBlocked, setMusicBlocked] = useState(false);
@@ -135,18 +137,30 @@ export default function App() {
           </motion.figure>
           <aside className="hero-editor-note" aria-label="About me">
             <span className="chapter-index">A few sides of me</span>
-            <div className={`role-wheel${rolesPaused ? " is-paused" : ""}`}>
+            <div className={`role-wheel${rolesPaused ? " is-paused" : ""}`} role="button" tabIndex={0}
+              aria-label={rolesPaused ? "Resume role rotation" : "Pause role rotation"} aria-pressed={rolesPaused}
+              onClick={() => setRolesPaused(!rolesPaused)} onKeyDown={event => {
+                if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setRolesPaused(!rolesPaused); }
+              }}>
               <ul className="role-track" aria-hidden="true">{["AI researcher", "Interdisciplinary enthusiast", "Hobbyist", "AI researcher", "Interdisciplinary enthusiast", "Hobbyist"].map((role, index) => <li key={index}>{role}</li>)}</ul>
             </div>
             <span className="role-accessible">AI researcher, Interdisciplinary enthusiast, Hobbyist.</span>
-            <button className="role-pause" type="button" aria-pressed={rolesPaused} onClick={() => setRolesPaused(!rolesPaused)}>{rolesPaused ? "Resume rotation" : "Pause rotation"}</button>
           </aside>
         </section>
         <ResearchNotebook onExplore={setSelectedProject} />
         <motion.section className="section research-record" aria-label="Publications and methods" {...reveal}>
           <ResearchRecord />
           <section className="technical-stack" aria-labelledby="technical-stack-title">
-          <header><span className="chapter-index">Skills & methods</span><h2 id="technical-stack-title">Technical stack</h2></header>
+          <header>
+            <span className="chapter-index">Brew. Build. Discover.</span>
+            <h2 id="technical-stack-title">Caffeinated <em>Stack</em></h2>
+            <div className="caffeinated-icons" role="img" aria-label="Coffee, code, and research">
+              <span><LuCoffee aria-hidden="true" /></span><b aria-hidden="true">+</b>
+              <span><LuCodeXml aria-hidden="true" /></span><b aria-hidden="true">+</b>
+              <span><LuSearch aria-hidden="true" /></span>
+            </div>
+            <p className="caffeinated-note">Fuelled by coffee. Built with code. Shared through science.</p>
+          </header>
           <div className="stack-grid" aria-label="Research technology stack">
             {stackGroups.map((group, index) => <motion.section className="stack-card" key={group.label}
               whileHover={reduced ? {} : { y: -6, rotate: index === 1 ? 0 : index ? 1 : -1 }}>
@@ -162,10 +176,17 @@ export default function App() {
           <div className="life-heading"><div><h2 id="life-title">Life, <em>in frames.</em></h2><p>Places photographed between research days.</p></div></div>
           <div className="photo-reel" tabIndex="0" role="region" aria-label="Looping photo reel of places">
             <div className="photo-reel-track">
-              {[...photos, ...photos].map(([file, , alt], index) => {
+              {[...photos, ...photos].map(([file, place, alt], index) => {
                 const clone = index >= photos.length;
-                return <figure className="photo" key={`${file}-${clone ? "clone" : "original"}`} data-clone={clone || undefined} aria-hidden={clone || undefined}>
+                return <figure className="photo insta-card" key={`${file}-${clone ? "clone" : "original"}`} data-clone={clone || undefined} aria-hidden={clone || undefined}>
                   <img src={`/portfolio/photos/${file}.webp`} alt={clone ? "" : alt} decoding="async" width="600" height="800" />
+                  <figcaption className="insta-footer">
+                    <a href="https://www.instagram.com/im_pranavgundla/" target="_blank" rel="noreferrer" tabIndex={clone ? -1 : 0} aria-label={`View @im_pranavgundla on Instagram — ${place}`}>
+                      <img className="insta-avatar" src={theme === "dark" ? "/portfolio/avatar-dark.png" : "/portfolio/avatar-light.png"} alt="" width="44" height="44" />
+                      <span className="insta-identity"><strong>@im_pranavgundla</strong><span>{place}</span></span>
+                      <FaInstagram aria-hidden="true" />
+                    </a>
+                  </figcaption>
                 </figure>;
               })}
             </div>
@@ -190,7 +211,32 @@ export default function App() {
             <h3 id="music-title">Always a soundtrack.</h3>
             <p className="music-fact">Fun fact: I listen to music for more than <strong>7 hours a day.</strong></p>
             <p className="music-track">Piano background music · Delosound</p>
-            <audio ref={audio} controls preload="metadata" aria-label="Play Piano background music by Delosound"
+            <div className="soundtrack-controls">
+              <button type="button" className="soundtrack-toggle" aria-label={musicPlaying ? "Pause soundtrack" : "Play soundtrack"}
+                onClick={() => {
+                  if (!audio.current.paused) audio.current.pause();
+                  else audio.current.play().catch(error => {
+                    if (error.name === "NotAllowedError") setMusicBlocked(true);
+                    else if (error.name !== "AbortError") setMusicError(true);
+                  });
+                }}>
+                {musicPlaying ? <LuPause aria-hidden="true" /> : <LuPlay aria-hidden="true" />}
+              </button>
+              <div className="soundtrack-seek">
+                <div className={`music-waves${musicPlaying ? " is-playing" : ""}`} aria-hidden="true">
+                  {Array.from({ length: 36 }, (_, index) => (
+                    <span key={index} className={musicDuration && index / 36 <= musicTime / musicDuration ? "is-elapsed" : undefined}
+                      style={{ height: `${18 + Math.abs(Math.sin(index * 1.7)) * 70}%`, animationDelay: `${-index * .13}s` }} />
+                  ))}
+                </div>
+                <input type="range" min="0" max={musicDuration || 1} step="0.1" value={musicTime} disabled={!musicDuration}
+                  aria-label="Seek soundtrack" aria-valuetext={`${Math.floor(musicTime)} of ${Math.floor(musicDuration)} seconds`}
+                  onChange={event => { const time = Number(event.target.value); audio.current.currentTime = time; setMusicTime(time); }} />
+              </div>
+            </div>
+            <audio ref={audio} preload="metadata"
+              onLoadedMetadata={event => { const duration = event.currentTarget.duration; setMusicDuration(Number.isFinite(duration) ? duration : 0); }}
+              onTimeUpdate={event => setMusicTime(event.currentTarget.currentTime)}
               src="/audio/delosound-piano-background-music-398277.mp3"
               onPlay={() => { musicStarted.current = true; }}
               onPlaying={() => { setMusicPlaying(true); setMusicBlocked(false); }} onPause={() => setMusicPlaying(false)}
