@@ -1,42 +1,3 @@
-<!doctype html>
-<html lang="en" data-theme="light" style="color-scheme: light;">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/brand/signature-icons/favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="icon" type="image/png" href="/brand/signature-icons/favicon-192.png" sizes="192x192" />
-    <link rel="icon" type="image/svg+xml" href="/brand/signature-icons/favicon.svg" sizes="any" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/brand/signature-icons/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#F4F5F7" />
-    <meta name="color-scheme" content="light dark" />
-    <link rel="stylesheet" href="/coffee-loader.css" />
-    <title>Pranav Swaroop Gundla - AI for Cancer Research</title>
-    <meta
-      name="description"
-      content="Pranav Swaroop Gundla builds interpretable AI for computational pathology, spatial biology, and glioma research."
-    />
-    <meta
-      property="og:title"
-      content="Pranav Swaroop Gundla - AI for Cancer Research"
-    />
-    <meta
-      property="og:description"
-      content="Computational pathology, spatial biology, and interpretable AI."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://psgundla.com/" />
-    <meta
-      property="og:image"
-      content="https://psgundla.com/portfolio/hero_histology.png"
-    />
-    <meta name="twitter:card" content="summary_large_image" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <section id="coffee-loader" aria-label="Loading portfolio" hidden>
-      <div class="signature-loader-identity">
-        <div class="signature-loader-mark" aria-hidden="true">
 <svg xmlns="http://www.w3.org/2000/svg" width="690" height="552" class="signature-logo" viewBox="-28 -28 690 552" role="img" aria-label="Animated Pranav Swaroop logo"><title>Pranav Swaroop — signature reveal</title><style>
 .signature-logo { fill: currentColor; }
 .signature-logo .draw { stroke-dasharray: 1; stroke-dashoffset: 0; animation: signature-draw var(--duration) cubic-bezier(.42,0,.22,1) var(--delay) both; }
@@ -60,12 +21,3 @@
  </g><rect class="ink-finish" width="635" height="497" fill="white"/></mask>
  <mask id="crescent0" maskUnits="userSpaceOnUse" x="0" y="0" width="635" height="497"><path class="draw ring-pen" pathLength="1" d="M441 94 C280 -94 -31 55 29 296 C64 473 261 552 405 444" fill="none" stroke="white" stroke-width="85"/><path class="draw cross-pen" pathLength="1" d="M26 268 H143" stroke="white" stroke-width="42"/><rect class="ring-finish" width="635" height="497" fill="white"/></mask>
  </defs><use href="#arc0" mask="url(#crescent0)"/><use href="#letters0" mask="url(#ink0)"/></svg>
-        </div>
-        <h2>Pranav Swaroop Gundla</h2>
-        <p class="signature-loader-caption">Since 1997</p>
-      </div>
-    </section>
-    <script src="/coffee-loader.js"></script>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>

@@ -60,6 +60,15 @@ export const projects = [
 export const publications = [
   {
     year: "2025",
+    month: "Preprint",
+    type: "Accepted · Nature",
+    title: "Divergent Genomic Evolution in Astrocytomas and Oligodendrogliomas",
+    venue: "bioRxiv · Archived preprint",
+    href: "https://doi.org/10.1101/2025.07.11.664189",
+    // Accepted title and journal status supplied by the author; DOI points to the earlier preprint.
+  },
+  {
+    year: "2025",
     month: "November",
     type: "Conference abstract",
     title:

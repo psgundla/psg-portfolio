@@ -1,0 +1,63 @@
+/* First-paint signature intro; available before the React bundle loads. */
+html[data-coffee-loading] { overflow: hidden; }
+#coffee-loader, #coffee-loader * { box-sizing: border-box; }
+#coffee-loader {
+  --loader-paper: #faf9f7;
+  --loader-ink: #191919;
+  --loader-muted: #62605b;
+  --loader-line: #d5d1c8;
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  overflow-y: auto;
+  padding: max(32px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+  color: var(--loader-ink);
+  background: var(--loader-paper);
+  opacity: 1;
+  transition: opacity 300ms ease;
+  font-family: 'IBM Plex Sans', Arial, sans-serif;
+}
+#coffee-loader[hidden] { display: none; }
+:root[data-theme='dark'] #coffee-loader {
+  --loader-paper: #191919;
+  --loader-ink: #faf9f7;
+  --loader-muted: #bdb9b1;
+  --loader-line: #514e49;
+}
+#coffee-loader.is-leaving { opacity: 0; pointer-events: none; }
+.signature-loader-identity { text-align: center; margin-block: auto; }
+.signature-loader-mark { width: clamp(160px, 24vw, 240px); max-width: 100%; margin: 0 auto 32px; }
+.signature-loader-mark svg { display: block; width: 100%; height: auto; }
+#coffee-loader h2 { margin: 0; font-family: inherit; font-size: clamp(20px, 3vw, 26px); font-weight: 400; line-height: 1.4; letter-spacing: -.025em; }
+#coffee-loader p { margin: 0; color: var(--loader-muted); font-size: 12px; line-height: 1.6; }
+#coffee-loader .signature-loader-caption { margin-top: 12px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+@media (max-height: 500px) {
+  #coffee-loader { gap: 16px; justify-content: flex-start; }
+  .signature-loader-mark { width: 112px; margin-bottom: 12px; }
+  .signature-loader-identity { margin-block: 0; }
+}
+@media (prefers-reduced-motion: reduce) { #coffee-loader { transition: none; } }
+@media (forced-colors: active) {
+  #coffee-loader { --loader-paper: Canvas; --loader-ink: CanvasText; --loader-muted: CanvasText; --loader-line: ButtonText; }
+}
+
+/* Keep the destination hidden until the moving copy reaches the same bounds. */
+html[data-coffee-loading] .brand img { visibility: hidden; }
+.signature-loader-mark { transform-origin: top left; }
+#coffee-loader.is-docking { background: transparent; transition: background 550ms ease; }
+#coffee-loader.is-docking .signature-loader-mark {
+  transform: translate(var(--logo-x), var(--logo-y)) scale(var(--logo-scale));
+  transition: transform 700ms cubic-bezier(.65, 0, .2, 1);
+}
+#coffee-loader.is-docking h2, #coffee-loader.is-docking .signature-loader-caption { opacity: 0; transition: opacity 180ms ease; }
+html[data-coffee-loading='handoff'] .editorial-hero { animation: signature-hero-enter 600ms 100ms both; }
+@keyframes signature-hero-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  #coffee-loader.is-docking, #coffee-loader.is-docking .signature-loader-mark { transition: none; }
+  html[data-coffee-loading='handoff'] .editorial-hero { animation: none; }
+}
