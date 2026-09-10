@@ -42,7 +42,7 @@ export default function NavPill() {
         transition={spring}
         style={{ width: open ? "min(360px, calc(100vw - 112px))" : "min(240px, calc(100vw - 112px))" }}
         onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}>
-        <div className="nav-desktop-links">{["Work", "Life", "Contact"].map(label => <a key={label} href={`#${label.toLowerCase()}`} aria-current={active === label.toLowerCase() ? "location" : undefined}>{label}</a>)}</div>
+        <div className="nav-desktop-links">{["Work", "Life", "Contact"].map(label => <a key={label} href={`/${label.toLowerCase()}`} aria-current={active === label.toLowerCase() ? "location" : undefined}>{label}</a>)}</div>
         <motion.button className="nav-pill-trigger" type="button" ref={trigger}
           aria-expanded={open} aria-controls="primary-navigation" aria-label={open ? "Close navigation" : "Open navigation"}
           onClick={() => setOpen(!open)} whileTap={reduced ? {} : { scale: 0.96 }}>
@@ -54,7 +54,7 @@ export default function NavPill() {
           <AnimatePresence initial={false}>
             {open && <motion.div className="nav-pill-links" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.18 }}>
               {["Work", "Life", "Contact"].map((label, index) => (
-                <motion.a key={label} href={`#${label.toLowerCase()}`} aria-current={active === label.toLowerCase() ? "location" : undefined} onClick={() => setOpen(false)}
+                <motion.a key={label} href={`/${label.toLowerCase()}`} aria-current={active === label.toLowerCase() ? "location" : undefined} onClick={() => setOpen(false)}
                   initial={{ opacity: 0, y: reduced ? 0 : -8 }} animate={{ opacity: 1, y: 0 }}
                   transition={reduced ? { duration: 0 } : { ...spring, delay: index * 0.035 }}
                   whileHover={reduced ? {} : { x: 5 }}>

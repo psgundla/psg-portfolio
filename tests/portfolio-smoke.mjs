@@ -10,13 +10,17 @@ try {
   const { default: NotFound, isPortfolioPath } = await server.ssrLoadModule('/src/components/NotFound.jsx');
   assert.ok(isPortfolioPath('/') && isPortfolioPath('/index.html'));
   assert.ok(!isPortfolioPath('/missing-page') && !isPortfolioPath('/404'));
+  for (const path of ['/work', '/life', '/contact', '/contact/', '/logo']) assert.ok(isPortfolioPath(path));
+  assert.ok(isPortfolioPath('/', '#contact'));
+  assert.ok(!isPortfolioPath('/', '#blogs') && !isPortfolioPath('/blogs'));
   const missingHtml = renderToStaticMarkup(React.createElement(NotFound));
   assert.ok(missingHtml.includes('Page Not Found') && missingHtml.includes('href="/"') && !missingHtml.includes('<iframe'));
   assert.ok(!missingHtml.includes('youtube'));
   const { default: App } = await server.ssrLoadModule('/src/App.jsx');
   const html = renderToStaticMarkup(React.createElement(App));
+  for (const path of ['/work', '/life', '/contact']) assert.ok(html.includes(`href="${path}"`));
   assert.equal((html.match(/class="stack-tooltip"/g) || []).length, 1, 'Toolkit must share one tooltip outside the key slots');
-  for (const anchor of ['main', 'work', 'life', 'social', 'contact']) {
+  for (const anchor of ['main', 'work', 'life', 'social', 'contact', 'logo']) {
     assert.ok(html.includes(`id="${anchor}"`), `Missing navigation target: ${anchor}`);
   }
   assert.ok(html.includes('aria-label="Open navigation"'), 'Missing pill trigger');

@@ -453,3 +453,29 @@ body::before { content: none; }
  .github-overview .github-calendar { min-width: 0; gap: clamp(1px, .3vw, 4px); }
  .github-overview .github-months { min-width: 0; }
 }
+
+/* Personal signature: three initials, matching the reference's card composition. */
+.logo-story { display: grid; grid-template-columns: 1.15fr repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 44px); align-items: start; }
+.logo-story-copy h2 { color: var(--ink); font-size: clamp(36px, 3.4vw, 48px); margin-bottom: 30px; }
+.logo-story-copy p { color: var(--muted); font-size: 17px; line-height: 1.8; margin-bottom: 16px; }
+.logo-story-signature { width: 120px; margin-top: 24px; }
+.logo-story-card { aspect-ratio: 3 / 4; border-radius: clamp(28px, 4vw, 54px); background: #e5d6f5; color: #242027; padding: 28px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 12px 20px rgb(25 25 25 / .08); border: 1px solid rgb(25 25 25 / .06); }
+.logo-story-letter:nth-of-type(odd) .logo-story-card { background: color-mix(in srgb, var(--accent) 28%, white); }
+.logo-story-letter:nth-of-type(2) .logo-story-card { background: rgb(255 255 255 / .72); border-color: rgb(255 255 255 / .9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: inset 0 1px 1px white, 0 12px 24px rgb(25 25 25 / .08); }
+.logo-story-name { align-self: flex-end; font-size: clamp(15px, 1.6vw, 22px); color: #51434c; }
+.logo-story-element { flex: 1; min-height: 0; width: 100%; object-fit: contain; margin-block: 22px; }
+.logo-story-letter figcaption { text-align: center; color: var(--muted); font-size: 18px; margin-top: 24px; }
+.logo-story-letter figcaption strong { font-weight: 500; }
+@media (max-width: 1000px) {
+ .logo-story { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+ .logo-story-copy { grid-column: 1 / -1; max-width: 620px; }
+ .logo-story-signature { width: 100px; }
+}
+@media (max-width: 600px) {
+ .logo-story { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+ .logo-story-copy { grid-column: auto; }
+ .logo-story-card { aspect-ratio: 4 / 3; padding: 26px; }
+ .logo-story-element { height: 190px; flex: auto; }
+ .logo-story-name { font-size: 22px; }
+ .logo-story-letter figcaption { margin-top: 16px; }
+}

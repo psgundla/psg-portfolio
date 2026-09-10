@@ -10,9 +10,11 @@ import ResearchNotebook from "./components/ResearchNotebook";
 import GitHubContributions from "./components/GitHubContributions";
 import ResearchRecord from "./components/ResearchRecord";
 import { photos } from "./data/portfolio";
+import { setupSectionNavigation } from "./sectionNavigation";
 import "./styles/Portfolio.css";
 import "./styles/Editorial.css";
 export default function App() {
+  useEffect(setupSectionNavigation, []);
   const [theme, setTheme] = useState("light");
   const [selectedProject, setSelectedProject] = useState(null);
   const [musicPlaying, setMusicPlaying] = useState(false);
@@ -68,10 +70,10 @@ export default function App() {
   return (
     <div className="site-shell">
       <MorphingCursor />
-      <a className="skip-link" href="#main">Skip to content</a>
+      <a className="skip-link" href="/">Skip to content</a>
       <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
       <header className="site-header">
-        <a className="brand" href="#main" aria-label="Pranav Swaroop Gundla, home">
+        <a className="brand" href="/" aria-label="Pranav Swaroop Gundla, home">
           <img src={`/brand/signature-${theme === "dark" ? "white" : "black"}.svg`} width="690" height="552" alt="" />
         </a>
         <NavPill />
@@ -141,6 +143,23 @@ export default function App() {
             <h3>BUNKER</h3><p>Browser-based techno sequencer built with Web Audio.</p><a className="text-link" href="/bunker/index.html" target="_blank" rel="noreferrer">Open sequencer</a>
           </motion.article>
         </section>
+        <section id="logo" className="section logo-story" aria-labelledby="logo-story-title">
+          <div className="logo-story-copy">
+            <h2 id="logo-story-title">The meaning behind <em>my logo.</em></h2>
+            <p>My logo is a PG monogram woven together with the Sanskrit “swa” from Swaroop. Pranav and Swaroop also evoke Om for me — a connection carried into the design.</p>
+            <p>The large G arc represents Gundla, my family name. It embraces every element, bringing them together and making me whole.</p>
+            <img className="logo-story-signature" src={`/brand/signature-${theme === "dark" ? "white" : "black"}.svg`} width="690" height="552" alt="My PG monogram with Sanskrit swa" loading="lazy" />
+          </div>
+          {[["P", "Pranav", "P for Pranav"], ["swa", "Swaroop", "Sanskrit “swa” for Swaroop"], ["G", "Gundla", "The enclosing G for Gundla"]].map(([initial, name, caption]) => (
+            <figure className="logo-story-letter" key={initial}>
+              <div className="logo-story-card">
+                <span className="logo-story-name">{name}</span>
+                <img className="logo-story-element" src={`/brand/signature-${name.toLowerCase()}.svg`} alt={`${name} element extracted from my logo`} width="300" height="360" loading="lazy" />
+              </div>
+              <figcaption>{caption}</figcaption>
+            </figure>
+          ))}
+        </section>
         <SocialPosts />
         <section className="personal-quote" aria-label="A personal reminder">
           <blockquote>“I might not be where I want to be yet, but <mark>I get closer</mark> <em>every day.</em>”</blockquote>
@@ -201,7 +220,7 @@ export default function App() {
             </nav>
         </section>
       </main>
-      <footer className="site-footer"><span>© {new Date().getFullYear()} Pranav Swaroop Gundla</span><a href="#main">Back to top</a></footer>
+      <footer className="site-footer"><span>© {new Date().getFullYear()} Pranav Swaroop Gundla</span><a href="/">Back to top</a></footer>
       <dialog className="project-dialog" ref={dialog} aria-labelledby="project-dialog-title" onClose={() => setSelectedProject(null)}
         onClick={event => {
           if (event.target === event.currentTarget) {
