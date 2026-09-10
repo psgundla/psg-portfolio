@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "psgundla-portfolio",
+  "name": "psg-portfolio",
   "compatibility_date": "2026-05-27",
   "assets": {
     "directory": "./dist",

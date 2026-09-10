@@ -4,7 +4,7 @@ import { socialPosts } from "../data/portfolio";
 
 const profiles = [
   { platform: "linkedin", label: "LinkedIn", mark: "in", href: "https://linkedin.com/in/pranavswaroopgundla/" },
-  { platform: "twitter", label: "Twitter / X", mark: "X", href: "https://x.com/im_pranavgundla" },
+  { platform: "twitter", label: "X", mark: "X", href: "https://x.com/im_pranavgundla" },
 ];
 
 function PostCard({ post, profile }) {
@@ -23,7 +23,7 @@ function PostCard({ post, profile }) {
       <p className="social-post-text" id={contentId}>{long && !expanded ? `${post.text.slice(0, 280)}…` : post.text}</p>
       {long && <button className="social-expand" type="button" aria-expanded={expanded} aria-controls={contentId} onClick={() => setExpanded(!expanded)}>{expanded ? "Show less" : "Read more"}</button>}
       {post.image && <img className="social-post-image" src={post.image.src} alt={post.image.alt} loading="lazy" />}
-      <a className="social-post-source" href={post.url} target="_blank" rel="noreferrer">View post on {profile.label} <span aria-hidden="true">↗</span></a>
+      <a className="social-post-source" href={post.url} target="_blank" rel="noreferrer">View post on {profile.label} </a>
     </motion.article>
   );
 }
@@ -31,12 +31,12 @@ function PostCard({ post, profile }) {
 export default function SocialPosts({ posts = socialPosts }) {
   return (
     <section id="social" className="section social" aria-labelledby="social-title">
-      <div className="section-heading"><span className="chapter-index">05 / In conversation</span><h2 id="social-title">Research & <em>conversations.</em></h2><p>Posts and conversations from LinkedIn and Twitter / X.</p></div>
+      <div className="section-heading"><span className="chapter-index">05 / In conversation</span><h2 id="social-title">Research & <em>conversations.</em></h2></div>
       <div className="social-columns">{profiles.map(profile => {
         const selected = posts.filter(post => post.platform === profile.platform);
         return <div className="social-column" key={profile.platform}>
           <div className="social-column-heading"><h3>{profile.label}</h3></div>
-          {selected.length ? selected.map(post => <PostCard key={post.url} post={post} profile={profile} />) : <div className="social-empty"><span className="social-mark" aria-hidden="true">{profile.mark}</span><p>Selected posts coming soon.</p><a className="text-link" href={profile.href} target="_blank" rel="noreferrer">Find me on {profile.label} ↗</a></div>}
+          {selected.length ? selected.map(post => <PostCard key={post.url} post={post} profile={profile} />) : <div className="social-empty"><span className="social-mark" aria-hidden="true">{profile.mark}</span><p>Selected posts coming soon.</p><a className="text-link" href={profile.href} target="_blank" rel="noreferrer">Find me on {profile.label}</a></div>}
         </div>;
       })}</div>
     </section>

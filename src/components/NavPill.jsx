@@ -54,11 +54,11 @@ export default function NavPill() {
           <AnimatePresence initial={false}>
             {open && <motion.div className="nav-pill-links" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.18 }}>
               {["Work", "Life", "Contact"].map((label, index) => (
-                <motion.a key={label} href={`#${label.toLowerCase()}`} onClick={() => setOpen(false)}
+                <motion.a key={label} href={`#${label.toLowerCase()}`} aria-current={active === label.toLowerCase() ? "location" : undefined} onClick={() => setOpen(false)}
                   initial={{ opacity: 0, y: reduced ? 0 : -8 }} animate={{ opacity: 1, y: 0 }}
                   transition={reduced ? { duration: 0 } : { ...spring, delay: index * 0.035 }}
                   whileHover={reduced ? {} : { x: 5 }}>
-                  <span>{label}</span><span aria-hidden="true">↗</span>
+                  <span>{label}</span>
                 </motion.a>
               ))}
             </motion.div>}

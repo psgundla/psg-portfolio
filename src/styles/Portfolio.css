@@ -164,7 +164,7 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
   .notebook-index { flex-direction: row; padding: 0 18px; gap: 20px; }
   .notebook-index > button { border-bottom: none; gap: 8px; }
   .notebook-index > button > span:nth-child(2) { font-size: 21px; }
-  .notebook-index > button > span:last-child, .notebook-index small, .notebook-margin { display: none; }
+  .notebook-index small, .notebook-margin { display: none; }
   .notebook-page { min-height: 380px; }
   .journey-tabs button { gap: 8px; font-size: 12px; padding-inline: 5px; }
   .journey-stop { grid-template-columns: 1fr 1.7fr; }
@@ -189,7 +189,6 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
   .notebook-index { flex-direction: column; gap: 0; padding: 8px 20px; }
   .notebook-index > button { padding: 16px 0; }
   .notebook-index > button:not(:last-of-type) { border-bottom: 1px solid var(--line); }
-  .notebook-index > button > span:last-child { display: block; }
   .notebook-page { grid-template-columns: 1fr; padding: 24px; gap: 28px; }
   .notebook-visual { width: min(100%, 380px); justify-self: center; }
   .notebook-copy h3 { font-size: 34px; }
@@ -287,7 +286,6 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
 .nav-pill-plus { display: grid; place-items: center; width: 27px; height: 27px; border: 1px solid var(--glass-rule); background: var(--glass-item); border-radius: 50%; font-size: 22px; line-height: 1; }
 .nav-pill-links { position: relative; display: grid; gap: 7px; padding: 9px 10px 10px; }
 .nav-pill-links a { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border: 1px solid var(--glass-rule); background: var(--glass-item); box-shadow: inset 0 1px 0 var(--glass-shine); border-radius: 17px; font-family: var(--serif); font-size: 27px; }
-.nav-pill-links a > span:last-child { font: 15px var(--sans); color: var(--green); }
 .nav-pill-links a:hover, .nav-pill-links a:focus-visible { background: var(--glass-item-hover); }
 .nav-pill :focus-visible { outline: 2px solid var(--green); outline-offset: 1px; }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -714,12 +712,9 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
   border: 1px solid #b89345;
   border-radius: 28px;
   background: radial-gradient(circle at 50% 42%, color-mix(in srgb, #c79a3c 16%, var(--paper)), var(--surface) 76%);
-  box-shadow: inset 0 0 0 5px var(--paper), inset 0 0 0 6px color-mix(in srgb, #b89345 58%, transparent), 0 24px 60px color-mix(in srgb, var(--ink) 10%, transparent);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--ink) 10%, transparent);
   text-align: center;
 }
-.achievement-award::before, .achievement-award::after { content: ""; position: absolute; width: 72px; height: 72px; border-color: color-mix(in srgb, #b89345 68%, transparent); pointer-events: none; }
-.achievement-award::before { inset: 18px auto auto 18px; border-top: 1px solid; border-left: 1px solid; border-radius: 12px 0 0; }
-.achievement-award::after { inset: auto 18px 18px auto; border-right: 1px solid; border-bottom: 1px solid; border-radius: 0 0 12px; }
 .achievement-laurel { position: absolute; inset: 18px; z-index: -1; width: calc(100% - 36px); height: calc(100% - 36px); color: #b89345; fill: currentColor; opacity: .72; transform: scaleX(1.36); }
 .achievement-content { width: min(100%, 270px); }
 .achievement-level { display: inline-block; padding: 6px 13px; border-radius: 999px; background: linear-gradient(110deg, #9b7022, #d3aa51, #9b7022); color: #fff9e9; font-size: 9px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
@@ -786,7 +781,7 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
 .github-repo div span:first-child { color: var(--green); }
 .github-footer { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 18px; color: var(--muted); font-size: 10px; }
 
-.life { position: relative; z-index: 1; background: var(--paper); }
+.life { position: relative; z-index: 1; background: transparent; }
 .life-heading { display: block; }
 .photo-reel {
   overflow: hidden;
@@ -981,7 +976,7 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
 .record-columns header { min-height: 90px; }
 .record-columns header h3, .record-achievements > header h3 { font-size: clamp(22px, 2vw, 30px); letter-spacing: -.035em; margin-top: 9px; }
 .record-columns .chapter-index { font-size: 9px; letter-spacing: .09em; }
-.record-columns .publication { grid-template-columns: 43px 1fr 12px; gap: 12px; padding: 22px 0; }
+.record-columns .publication { grid-template-columns: 43px minmax(0, 1fr); gap: 12px; padding: 22px 0; }
 .record-columns .publication h3 { font-size: clamp(17px, 1.5vw, 22px); }
 .record-columns .publication-year { font-size: 18px; }
 .record-papers > .text-link { margin-top: 24px; }
@@ -1036,7 +1031,7 @@ main, .site-header, .site-footer { width: min(calc(100% - var(--gutter) * 2), va
 @media(max-width:650px) { .record-timeline .record-banner { flex-direction: row; align-items: center; gap: 14px; top: 70px; padding: 12px; } .record-timeline .record-banner h2 { font-size: 22px; } .record-timeline .record-banner p { display: none; } .record-timeline .record-year-wheel { font-size: 42px; } }
 @media(prefers-reduced-motion:reduce) { .record-columns .publication { transition: none; } }
 
-.record-honor { position: relative; overflow: hidden; border-color: #b89345; background: radial-gradient(circle at 50% 42%, color-mix(in srgb, #c79a3c 16%, var(--paper)), var(--surface) 76%); box-shadow: inset 0 0 0 5px var(--paper), inset 0 0 0 6px color-mix(in srgb, #b89345 58%, transparent), 0 24px 60px color-mix(in srgb, var(--ink) 10%, transparent); }
+.record-honor { position: relative; overflow: hidden; border-color: #b89345; background: radial-gradient(circle at 50% 42%, color-mix(in srgb, #c79a3c 16%, var(--paper)), var(--surface) 76%); box-shadow: 0 24px 60px color-mix(in srgb, var(--ink) 10%, transparent); }
 .record-honor::before, .record-honor::after { content: ""; position: absolute; width: 72px; height: 72px; border-color: color-mix(in srgb, #b89345 68%, transparent); pointer-events: none; }
 .record-honor::before { inset: 18px auto auto 18px; border-top: 1px solid; border-left: 1px solid; border-radius: 12px 0 0; }
 .record-honor::after { inset: auto 18px 18px auto; border-right: 1px solid; border-bottom: 1px solid; border-radius: 0 0 12px; }

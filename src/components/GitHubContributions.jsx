@@ -63,7 +63,7 @@ export default function GitHubContributions() {
 
       </div>
 
-      <div className="github-footer"><span>Public GitHub activity · updated 8 September 2026</span><a className="text-link" href="https://github.com/psgundla" target="_blank" rel="noreferrer">View current profile ↗</a></div>
+      <div className="github-footer"><span>Public GitHub activity · updated 8 September 2026</span><a className="text-link" href="https://github.com/psgundla" target="_blank" rel="noreferrer">View current profile</a></div>
     </section>
   );
 }

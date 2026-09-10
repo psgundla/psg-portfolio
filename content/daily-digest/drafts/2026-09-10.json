@@ -1,0 +1,41 @@
+{
+  "slug": "daily-digest-2026-09-10",
+  "date": "2026-09-10",
+  "status": "draft",
+  "title": "Your AI has tools. Does it have a useful job?",
+  "summary": "More tools don’t mean better AI. Start with one useful task — and ask for evidence.",
+  "intro": "Picture an assistant that can search your project notes, inspect a dataset, and call a script. The demo looks impressive. Then someone asks a less glamorous question: which part of your working day has become easier? That gap between a connected tool and a useful workflow is the thread worth pulling from today’s digest.",
+  "sections": [
+    {
+      "heading": "The useful find",
+      "paragraphs": [
+        "Microsoft’s MCP for Beginners repository appeared in today’s Morning AI News Radar. It teaches the Model Context Protocol through examples in languages including Python, JavaScript, and TypeScript, with material on security, practical implementation, and case studies. This is a learning resource spotted by the radar, not a claim that the project launched today. [1]",
+        "MCP provides a common way for AI applications to connect to tools and services. A shared interface makes those connections easier to describe; it does not decide which actions belong in your workflow. That second question is where an interesting prototype begins. [1]"
+      ]
+    },
+    {
+      "heading": "Start with one boring task",
+      "paragraphs": [
+        "Consider a research project with a folder of experiment reports. A useful first assistant might answer: which run used this configuration, and where is its evaluation report? It could return the exact file and the relevant settings, leaving the researcher to interpret the result. This is a proposed example, not an experiment conducted for this article.",
+        "That narrow task has an advantage: you can check the answer. Choose a few questions whose answers are already known. Record whether the assistant finds the right report, cites the right location, and admits when the evidence is missing. A polished explanation of the wrong run should count as a failure."
+      ]
+    },
+    {
+      "heading": "The editorial take: connections are the beginning",
+      "paragraphs": [
+        "The temptation is to measure progress by the number of tools an assistant can reach. A more useful question is whether those connections reduce the work needed to reach a defensible answer. For the report-finding example, that means accounting for the time spent checking its response as well as the time spent asking.",
+        "Keep the first version read-only. If it cannot reliably locate a report, giving it permission to launch new experiments adds responsibility before proving usefulness. Once retrieval works, the next capability should solve a specific remaining problem. Each added action needs a reason to exist."
+      ]
+    },
+    {
+      "heading": "A small experiment for tomorrow",
+      "paragraphs": [
+        "Pick five questions about a public or non-sensitive project. Answer them manually, keeping the supporting file locations. Then try the same questions with a narrowly connected assistant and compare correctness, missing evidence, and total effort, including verification.",
+        "Five questions will not establish reliability. They can expose an unhelpful prototype quickly and suggest what to test next. The question to carry away: what is one task you would gladly stop doing by hand — if the assistant showed its evidence?"
+      ]
+    }
+  ],
+  "sources": [
+    { "title": "[1] Microsoft — MCP for Beginners (primary repository, checked 10 September 2026)", "url": "https://github.com/microsoft/mcp-for-beginners" }
+  ]
+}
