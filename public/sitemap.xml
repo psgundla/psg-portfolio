@@ -7,25 +7,19 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://psgundla.com/#abstract</loc>
+    <loc>https://psgundla.com/work</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://psgundla.com/#experience</loc>
+    <loc>https://psgundla.com/life</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://psgundla.com/#references</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://psgundla.com/#contact</loc>
+    <loc>https://psgundla.com/contact</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

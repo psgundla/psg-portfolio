@@ -1,11 +1,16 @@
 import { useEffect } from 'react';
+import { sectionForPath } from '../sectionNavigation';
 
-export function isPortfolioPath(pathname) {
-  return pathname === '/' || pathname === '/index.html';
+export function isPortfolioPath(pathname, hash = '') {
+  return Boolean(sectionForPath(pathname)) && (!hash || ['#logo', '#main', '#work', '#life', '#contact', '#social', '#technical-stack', '#open-source'].includes(hash));
 }
 
 export default function NotFound() {
-  useEffect(() => { document.title = '404 — Page not found | Pranav Swaroop Gundla'; }, []);
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = '404 — Page not found | Pranav Swaroop Gundla';
+    return () => { document.title = previousTitle; };
+  }, []);
 
   return (
     <main className="not-found" id="main">
@@ -21,7 +26,7 @@ export default function NotFound() {
         <span>4</span>
       </div>
       <p className="not-found-description">The page you are looking for doesn’t exist or has been moved.</p>
-      <a className="not-found-home" href="/" target="_blank" rel="noreferrer">Go to Home Page</a>
+      <a className="not-found-home" href="/">Go to Home Page</a>
     </main>
   );
 }
