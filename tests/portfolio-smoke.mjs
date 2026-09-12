@@ -20,7 +20,8 @@ try {
   const html = renderToStaticMarkup(React.createElement(App));
   for (const path of ['/work', '/life', '/contact']) assert.ok(html.includes(`href="${path}"`));
   assert.equal((html.match(/class="stack-tooltip"/g) || []).length, 1, 'Toolkit must share one tooltip outside the key slots');
-  for (const anchor of ['main', 'work', 'life', 'social', 'contact', 'logo']) {
+  assert.ok(!html.includes('id="social"'), 'Research and conversations section must stay removed');
+  for (const anchor of ['main', 'work', 'life', 'contact', 'logo']) {
     assert.ok(html.includes(`id="${anchor}"`), `Missing navigation target: ${anchor}`);
   }
   assert.ok(html.includes('aria-label="Open navigation"'), 'Missing pill trigger');
@@ -68,9 +69,6 @@ try {
   assert.ok(!cards.includes('Selected posts coming soon.'));
   const empty = renderToStaticMarkup(React.createElement(SocialPosts, { posts: [] }));
   assert.ok(empty.includes('Selected posts coming soon.'), 'Empty posts must not fabricate content');
-  assert.ok(html.includes('Inigo Martincorena') && html.includes('Post summary'));
-  assert.ok(html.includes('ugcPost-7394493698782384129') && html.includes('2095432511593587188'));
-  assert.ok(!html.includes('Selected posts coming soon.'));
   const pkg = JSON.parse(await readFile('package.json', 'utf8'));
   assert.ok(pkg.dependencies.motion, 'Motion dependency missing');
   assert.ok(!pkg.dependencies.gsap && !pkg.dependencies['@gsap/react'], 'GSAP dependency remains');

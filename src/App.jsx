@@ -5,7 +5,6 @@ import { LuPlay, LuPause, LuSun, LuMoon, LuCoffee, LuCodeXml, LuSearch } from "r
 import TechnicalStack from "./components/TechnicalStack";
 import NavPill from "./components/NavPill";
 import MorphingCursor from "./components/MorphingCursor";
-import SocialPosts from "./components/SocialPosts";
 import ResearchNotebook from "./components/ResearchNotebook";
 import GitHubContributions from "./components/GitHubContributions";
 import ResearchRecord from "./components/ResearchRecord";
@@ -160,7 +159,6 @@ export default function App() {
             </figure>
           ))}
         </section>
-        <SocialPosts />
         <section className="personal-quote" aria-label="A personal reminder">
           <blockquote>“I might not be where I want to be yet, but <mark>I get closer</mark> <em>every day.</em>”</blockquote>
         </section>
