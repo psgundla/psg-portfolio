@@ -479,3 +479,74 @@ body::before { content: none; }
  .logo-story-name { font-size: 22px; }
  .logo-story-letter figcaption { margin-top: 16px; }
 }
+
+/* Static glass frames in the site's ivory, charcoal, and vermilion palette. */
+:root {
+ --frame-fill: rgb(248 248 245 / .68);
+ --frame-glow: color-mix(in srgb, var(--accent) 15%, transparent);
+ --frame-rim: linear-gradient(155deg, #ffffffe6, color-mix(in srgb, var(--accent) 32%, transparent) 45%, #19191930 65%, #ffffffb3);
+}
+:root[data-theme='dark'] {
+ --frame-fill: rgb(35 36 38 / .76);
+ --frame-glow: color-mix(in srgb, var(--accent) 20%, transparent);
+ --frame-rim: linear-gradient(155deg, #ffffff70, color-mix(in srgb, var(--accent) 45%, transparent) 45%, #00000050 65%, #ffffff40);
+}
+/* Award glass keeps the existing gold identity in both themes. */
+.achievement-award {
+ --frame-glow: rgb(199 154 60 / .2);
+ --frame-rim: linear-gradient(155deg, #fff9e9cc, #d3aa5180 45%, #9b702260 65%, #fff9e999);
+ --material-edge: #b8934580;
+}
+:root[data-theme='dark'] .achievement-award {
+ --frame-glow: rgb(199 154 60 / .25);
+ --frame-rim: linear-gradient(155deg, #fff9e970, #d3aa5199 45%, #9b702240 65%, #fff9e940);
+}
+:root .site-shell :is(.nav-pill, .logo-story-card, .glass-key, .notebook, .scholar-glass, .caffeinated-icons > span, .music-card, .bunker-card, .insta-card, .achievement-award, .github-calendar-panel, .github-repo) {
+ position: relative;
+ background: radial-gradient(ellipse at 100% 100%, var(--frame-glow), transparent 68%),
+  linear-gradient(155deg, var(--control-light), transparent 42%, rgb(25 25 25 / .04)), var(--frame-fill);
+ border: 1px solid var(--material-edge);
+ box-shadow: inset 0 1px 2px var(--control-light), inset 0 -2px 4px rgb(25 25 25 / .08), var(--control-shadow);
+ backdrop-filter: blur(12px) saturate(120%);
+ -webkit-backdrop-filter: blur(12px) saturate(120%);
+ color: var(--ink);
+}
+:root .site-shell :is(.nav-pill, .logo-story-card, .glass-key, .notebook, .scholar-glass, .caffeinated-icons > span, .music-card, .bunker-card, .insta-card, .achievement-award, .github-calendar-panel, .github-repo)::before { content: none; }
+:root .site-shell :is(.nav-pill, .logo-story-card, .glass-key, .notebook, .scholar-glass, .caffeinated-icons > span, .music-card, .bunker-card, .insta-card, .achievement-award, .github-calendar-panel, .github-repo)::after {
+ content: ''; position: absolute; inset: 0; padding: 1.5px; border: 0; border-radius: inherit;
+ background: var(--frame-rim); box-shadow: none; pointer-events: none;
+ -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) content-box;
+ mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) content-box;
+ -webkit-mask-composite: xor;
+ mask-composite: exclude;
+}
+:root .site-shell .glass-key svg { color: var(--accent); filter: none; }
+:root .site-shell .glass-key:focus-visible { outline-color: var(--accent); }
+:root .site-shell .glass-key:hover,
+:root .site-shell .glass-key:active,
+:root .site-shell .glass-key[data-active='true'] {
+ background-color: var(--frame-fill);
+ box-shadow: inset 0 1px 2px var(--control-light), inset 0 -2px 4px rgb(25 25 25 / .08), var(--control-shadow);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+ :root .site-shell :is(.nav-pill, .logo-story-card, .glass-key, .notebook, .scholar-glass, .caffeinated-icons > span, .music-card, .bunker-card, .insta-card, .achievement-award, .github-calendar-panel, .github-repo) { background: var(--surface); }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
+ :root .site-shell :is(.nav-pill, .logo-story-card, .glass-key, .notebook, .scholar-glass, .caffeinated-icons > span, .music-card, .bunker-card, .insta-card, .achievement-award, .github-calendar-panel, .github-repo) {
+  background: var(--surface); border-color: var(--ink); box-shadow: none;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+ }
+ :root .site-shell :is(.nav-pill, .logo-story-card, .glass-key, .notebook, .scholar-glass, .caffeinated-icons > span, .music-card, .bunker-card, .insta-card, .achievement-award, .github-calendar-panel, .github-repo)::after { display: none; }
+ :root .site-shell .glass-key[data-active='true'] { outline: 2px solid var(--ink); outline-offset: 2px; }
+}
+@media (forced-colors: active) {
+ :root .site-shell .glass-key svg { color: ButtonText; }
+ :root .site-shell .glass-key:focus-visible { outline-color: Highlight; }
+}
+
+/* The research wrapper owns the glass; its inner panels let it show through. */
+:root .site-shell .notebook > :is(.notebook-index, .notebook-page) {
+ background: transparent; border-radius: 0; box-shadow: none;
+ backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+:root .site-shell .caffeinated-icons > span { color: var(--accent); }
