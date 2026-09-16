@@ -89,7 +89,7 @@ export default function App() {
             <p className="hero-summary">Connecting glioma histology with spatial biology through deep learning.</p>
           </motion.div>
           <motion.figure className="hero-avatar" style={{ y: reduced ? 0 : heroY }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.8 }}>
-            <img src={theme === "light" ? "/portfolio/avatar-light.png" : "/portfolio/avatar-dark.png"} width="1024" height="1536" fetchPriority="high" alt="Illustrated portrait of Pranav Swaroop Gundla" />
+            <img src="/portfolio/hero-portrait.png" width="1122" height="1402" fetchPriority="high" alt="Portrait of Pranav Swaroop Gundla" />
           </motion.figure>
           <aside className="hero-editor-note" aria-label="About me">
             <div className={`role-wheel${rolesPaused ? " is-paused" : ""}`} role="button" tabIndex={0}

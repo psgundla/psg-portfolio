@@ -40,8 +40,8 @@ try {
   assert.ok(!photos.some(([file]) => ['esmo-merit-award', 'conference-friends', 'ikim-summer'].includes(file)), 'People photos remain in reel');
   await access('public/CV-Pranav-Swaroop-Gundla.pdf');
   await access('public/bunker/index.html');
-  assert.ok(html.includes('/portfolio/avatar-light.png') && !html.includes('/portfolio/research-desk.png'), 'Avatar hero or removed research art is incorrect');
-  for (const file of ['public/portfolio/avatar-light.png', 'public/portfolio/avatar-dark.png']) await access(file);
+  assert.ok(html.includes('src="/portfolio/hero-portrait.png"') && !html.includes('hero-pose-') && !html.includes('/portfolio/research-desk.png'), 'Portrait hero is incorrect');
+  for (const file of ['public/portfolio/hero-portrait.png', 'public/portfolio/avatar-light.png', 'public/portfolio/avatar-dark.png']) await access(file);
   assert.ok(html.includes('class="photo-reel"') && !html.includes('photo-controls'), 'Infinite photo reel missing');
   assert.ok(html.replace(/<[^>]*>/g, '').includes('Let’s Connect') && !html.includes('Frame 1 of'), 'Requested copy cleanup missing');
   assert.ok(html.includes('class="achievement-award"') && html.includes('Genetic subtype prediction in diffuse gliomas'), 'Achievement award redesign missing');
