@@ -49,6 +49,6 @@ export default function MorphingCursor() {
     };
   }, []);
   return (
-    <div ref={cursor} className="morphing-cursor" aria-hidden="true"><span /><svg viewBox="0 0 24 28" focusable="false"><path d="M2 1v22l6-6 4 9 4-2-4-9h9Z" /></svg></div>
+    <div ref={cursor} className="morphing-cursor" aria-hidden="true"><span /><strong>Open link ↗</strong></div>
   );
 }
