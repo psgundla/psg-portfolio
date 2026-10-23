@@ -5,6 +5,7 @@ export default function MorphingCursor() {
   useEffect(() => {
     const media = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none)');
     const root = document.documentElement;
+    let position = null;
     const hide = () => {
       root.classList.remove('morphing-cursor-on');
       cursor.current?.classList.remove('is-visible', 'is-pressed');
@@ -15,13 +16,21 @@ export default function MorphingCursor() {
       if (!node || !media.matches || event.pointerType !== 'mouse' || !(target instanceof Element)) return hide();
       // Native cursors remain available for editing, disabled controls and top-layer dialogs.
       if (target.closest('audio, video, input, textarea, select, [contenteditable]:not([contenteditable="false"]), [disabled], [aria-disabled="true"], dialog, iframe')) return hide();
+      position = { clientX: event.clientX, clientY: event.clientY };
+      const nav = target.closest('.nav-pill');
       const link = target.closest('a[href], [role="link"]');
       const text = target.closest('a, button, summary, h1, h2, h3, h4, h5, h6, p, span, li, label, strong, em, small, blockquote, figcaption, [role="button"], [role="tab"]');
       node.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
-      node.classList.toggle('is-link', Boolean(link));
-      node.classList.toggle('is-text', !link && Boolean(text?.textContent.trim()));
+      node.classList.toggle('is-nav', Boolean(nav));
+      node.classList.toggle('is-link', !nav && Boolean(link));
+      node.classList.toggle('is-text', !nav && !link && Boolean(text?.textContent.trim()));
       node.classList.add('is-visible');
       root.classList.add('morphing-cursor-on');
+    };
+    const scroll = () => {
+      if (position && root.classList.contains('morphing-cursor-on')) {
+        move({ ...position, pointerType: 'mouse', target: document.elementFromPoint(position.clientX, position.clientY) });
+      }
     };
     const down = () => cursor.current?.classList.add('is-pressed');
     const up = () => cursor.current?.classList.remove('is-pressed');
@@ -33,7 +42,7 @@ export default function MorphingCursor() {
     document.documentElement.addEventListener('pointerleave', hide);
     document.addEventListener('keydown', key);
     window.addEventListener('blur', hide);
-    window.addEventListener('scroll', hide, true);
+    window.addEventListener('scroll', scroll, true);
     media.addEventListener('change', hide);
     return () => {
       hide();
@@ -44,7 +53,7 @@ export default function MorphingCursor() {
       document.documentElement.removeEventListener('pointerleave', hide);
       document.removeEventListener('keydown', key);
       window.removeEventListener('blur', hide);
-      window.removeEventListener('scroll', hide, true);
+      window.removeEventListener('scroll', scroll, true);
       media.removeEventListener('change', hide);
     };
   }, []);
