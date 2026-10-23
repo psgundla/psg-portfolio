@@ -67,13 +67,16 @@ export const publications = [
     venue: "",
     href: "#",
   },
+
   {
-    year: "2025",
-    month: "Preprint",
-    type: "Accepted",
-    title: "Tumor-initiating genetics and therapy drive divergent molecular evolution in IDH-mutant gliomas",
-    venue: "bioRxiv · Archived preprint",
-    href: "https://doi.org/10.1101/2025.07.11.664189",
+    year: "2026",
+    month: "October",
+    published: "2026-10-14",
+    type: "Journal article · Nature",
+    title: "Divergent genomic evolution in astrocytomas and oligodendrogliomas",
+    venue: "Nature · Open access",
+    href: "https://www.nature.com/articles/s41586-026-11150-x",
+    image: "/portfolio/nature-glioma-2026.png",
   },
   {
     year: "2025",
@@ -83,6 +86,9 @@ export const publications = [
       "Genetic subtype prediction in diffuse gliomas with a vision transformer-based model",
     venue: "ESMO Real World Data and Digital Oncology · 278P",
     href: "https://doi.org/10.1016/j.esmorw.2025.100474",
+    image: "/portfolio/esmo-glioma-2025.png",
+    imageAlt: "Published abstract 278P on the ESMO conference abstracts page",
+    imageWidth: 504,
   },
   {
     year: "2023",
@@ -93,6 +99,10 @@ export const publications = [
       "A comprehensive analysis of mRNA expression profiles of esophageal squamous cell carcinoma reveals downregulation of Desmoglein 1 and crucial genomic targets",
     venue: "Cancer Biomarkers · 38(4)",
     href: "https://doi.org/10.3233/CBM-230145",
+    image: "/portfolio/cancer-biomarkers-2023.png",
+    imageAlt: "Cancer Biomarkers publisher page with article title and abstract",
+    imageWidth: 900,
+    imageHeight: 550,
   },
   {
     year: "2023",
@@ -103,6 +113,7 @@ export const publications = [
       "Global comparative transcriptomes uncover novel and population-specific gene expression in esophageal squamous cell carcinoma",
     venue: "Infectious Agents and Cancer · 18, 47",
     href: "https://doi.org/10.1186/s13027-023-00525-8",
+    image: "/portfolio/global-transcriptomes-2023.png",
   },
 ];
 

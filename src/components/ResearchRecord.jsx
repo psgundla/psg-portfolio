@@ -12,7 +12,7 @@ export default function ResearchRecord() {
       <section className="record-papers" aria-labelledby="record-publications">
         <header><h3 id="record-publications">Publications</h3></header>
         <div className="publications">{publications.map(paper => <a className="publication" key={paper.href} href={paper.href} target="_blank" rel="noreferrer">
-          <span className="publication-year">{paper.year}<small>{paper.month}</small></span><div><span className="publication-type">{paper.type}</span><h3>{paper.title}</h3><p>{paper.venue}</p></div>
+          <span className="publication-year">{paper.year}<small>{paper.month}</small></span><div>{paper.image && <img className="publication-thumbnail" src={paper.image} alt={paper.imageAlt || `First page of ${paper.title}`} width={paper.imageWidth || 490} height={paper.imageHeight || 650} loading="lazy" />}<span className="publication-type">{paper.type}</span><h3>{paper.title}</h3><p><strong>{paper.venue.split(" · ")[0]}</strong>{paper.venue.slice(paper.venue.split(" · ")[0].length)}</p></div>
         </a>)}</div>
         <a className="text-link scholar-glass raised-glass brand-scholar" aria-label="Google Scholar" title="Google Scholar" href="https://scholar.google.com/citations?user=UzlYsbgAAAAJ&hl=en" target="_blank" rel="noreferrer"><SiGooglescholar aria-hidden="true" /></a>
       </section>

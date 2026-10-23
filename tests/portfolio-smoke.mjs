@@ -28,9 +28,16 @@ try {
   assert.ok(html.includes('aria-expanded="false"'), 'Pill must start closed');
   assert.ok(html.includes('id="primary-navigation" hidden'), 'Closed navigation must be hidden');
   const { publications, photos } = await server.ssrLoadModule('/src/data/portfolio.js');
-  for (const paper of publications) assert.ok(html.includes(paper.href), `Missing publication: ${paper.title}`);
-  assert.ok(html.includes('Divergent Genomic Evolution in Astrocytomas and Oligodendrogliomas'));
-  assert.ok(html.includes('Accepted · Nature') && html.includes('bioRxiv · Archived preprint'));
+  for (const paper of publications) {
+    assert.ok(html.includes(paper.href), `Missing publication: ${paper.title}`);
+    if (paper.type === "Under Revision") continue;
+    assert.ok(paper.image && html.includes(`src="${paper.image}"`), `Missing thumbnail: ${paper.title}`);
+    await access(`public${paper.image}`);
+  }
+  assert.ok(html.includes('Divergent genomic evolution in astrocytomas and oligodendrogliomas'));
+  assert.ok(html.includes('Journal article · Nature') && html.includes('<strong>Nature</strong> · Open access'));
+  assert.ok(html.includes('src="/portfolio/nature-glioma-2026.png"') && html.includes('First page of Divergent genomic evolution'));
+  await access('public/portfolio/nature-glioma-2026.png');
   assert.ok(html.includes('I might not be where I want to be yet, but <mark>I get closer</mark> <em>every day.</em>'));
   assert.ok(html.includes('class="contact-logo"') && !html.includes('class="research-placeholder"'));
   assert.ok(!html.includes('class="chapter-index"'), 'Main-page section eyebrow labels must stay removed');
